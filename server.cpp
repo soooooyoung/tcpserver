@@ -7,5 +7,8 @@
 int main(int arg, char **argv)
 {
     ServerController *server1 = new ServerController("127.0.0.1", 40000, "Default TCP Server");
+    server1->Start();
+
+    scanf("\n");
     return 0;
 }

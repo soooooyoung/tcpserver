@@ -12,7 +12,7 @@ private:
     std::list<Client *> client_db;
 
 public:
-    ServerController *tcp_ctrlr;
+    ServerController *ctrlr;
     ClientDbManager(ServerController *);
     ~ClientDbManager();
 };
