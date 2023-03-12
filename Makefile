@@ -2,6 +2,7 @@ CC=g++
 CFLAGS=-g
 TARGET:server.exe
 LIBS=-lpthread
+WINDOWLIBS=-lws2_32
 OBJS=ClientDbManager.o 		 		\
 			ClientServiceManager.o 		 \
 			ConnectionAcceptor.o 	 \
@@ -9,7 +10,7 @@ OBJS=ClientDbManager.o 		 		\
 			network_utils.o					
 
 server.exe:server.o ${OBJS}
-	${CC} ${CFLAGS} ${OBJS} server.o -o server.exe ${LIBS}
+	${CC} ${CFLAGS} ${OBJS} server.o -o server.exe ${LIBS} ${WINDOWLIBS}
 
 server.o:server.cpp
 	${CC} ${CFLAGS} -c server.cpp -o server.o
@@ -27,7 +28,7 @@ ServerController.o:ServerController.cpp
 	${CC} ${CFLAGS} -c ServerController.cpp -o ServerController.o
 
 network_utils.o:network_utils.cpp
-	${CC} ${CFLAGS} -c network_utils.cpp -o network_utils.o
+	${CC} ${CFLAGS} -c network_utils.cpp -o network_utils.o 
 
 clean:
 	rm -f *.o

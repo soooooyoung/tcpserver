@@ -1,17 +1,16 @@
-#ifdef __CLIENTSERVICEMANAGER__
+#ifndef __CLIENTSERVICEMANAGER__
 #define __CLIENTSERVICEMANAGER__
-
 
 class ServerController;
 
-class ClientServiceManager{
+class ClientServiceManager
+{
 
-    private:
-
-    public:
+private:
+public:
     ServerController *ctrlr;
     ClientServiceManager(ServerController *);
     ~ClientServiceManager();
-}
+};
 
 #endif

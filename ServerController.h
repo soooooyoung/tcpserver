@@ -1,4 +1,4 @@
-#ifdef __SERVERCONTROLLER__
+#ifndef __SERVERCONTROLLER__
 #define __SERVERCONTROLLER__
 
 #include <stdint.h>
@@ -8,25 +8,24 @@ class ConnectionAcceptor;
 class ClientServiceManager;
 class ClientDbManager;
 
+class ServerController
+{
 
-class ServerController {
-
-    private:
+private:
     ConnectionAcceptor *conn_acc;
     ClientDbManager *client_db_mgr;
     ClientServiceManager *client_svc_mgr;
 
-    public:
+public:
     uint32_t ip_addr;
     uint16_t port_no;
     std::string name;
-    
-    ServerController(string ip_addr, uint16_t port_no, string name);
+
+    ServerController(std::string ip_addr, uint16_t port_no, std::string name);
     ~ServerController();
 
     void Start();
     void Stop();
-}
-
+};
 
 #endif

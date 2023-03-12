@@ -1,8 +1,8 @@
 #include <stdint.h>
 #include <stdlib.h>
 #include <memory.h>
-#include <winsock.h>  // #include <arpa/inet.h> - Unix
 #include <ws2tcpip.h> // #include <sys/socket.h> - defined in IEEE Std. 1003.1 (POSIX), but Windows is non-compliant with the POSIX standard.
+// #include <winsock.h>  // #include <arpa/inet.h> - Unix
 #include "network_utils.h"
 
 //  Network Byte Order **: The TCP/IP standard network byte order is big-endian. In order to participate in a TCP/IP network, little-endian systems usually bear the burden of conversion to network byte order.

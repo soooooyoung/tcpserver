@@ -1,17 +1,16 @@
-#ifdef __CONNECTIONACCEPTOR__
+#ifndef __CONNECTIONACCEPTOR__
 #define __CONNECTIONACCEPTOR__
 
 class ServerController;
 
-class ConnectionAcceptor {
+class ConnectionAcceptor
+{
 
-    private:
-
-    public:
+private:
+public:
     ServerController *ctrlr;
     ConnectionAcceptor(ServerController *);
     ~ConnectionAcceptor();
-
-}
+};
 
 #endif

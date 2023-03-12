@@ -1,14 +1,17 @@
-#ifdef __CLIENTDBMANAGER__
+#ifndef __CLIENTDBMANAGER__
 #define __CLIENTDBMANAGER__
 
+#include <list>
 
+class Client;
 class ServerController;
 
-class ClientDbManager {
-    private:
+class ClientDbManager
+{
+private:
     std::list<Client *> client_db;
-    
-    public:
+
+public:
     ServerController *tcp_ctrlr;
     ClientDbManager(ServerController *);
     ~ClientDbManager();
