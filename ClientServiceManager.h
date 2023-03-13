@@ -11,6 +11,8 @@ public:
     ServerController *ctrlr;
     ClientServiceManager(ServerController *);
     ~ClientServiceManager();
+
+    void StartClientServiceManagerThread();
 };
 
 #endif

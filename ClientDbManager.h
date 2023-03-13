@@ -15,6 +15,8 @@ public:
     ServerController *ctrlr;
     ClientDbManager(ServerController *);
     ~ClientDbManager();
+
+    void StartClientDbManagerThread();
 };
 
 #endif

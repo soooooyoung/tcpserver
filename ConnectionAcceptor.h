@@ -11,6 +11,8 @@ public:
     ServerController *ctrlr;
     ConnectionAcceptor(ServerController *);
     ~ConnectionAcceptor();
+
+    void StartConnectionAcceptorThread();
 };
 
 #endif

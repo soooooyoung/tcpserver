@@ -6,4 +6,8 @@ ClientServiceManager::ClientServiceManager(ServerController *ctrlr)
     this->ctrlr = ctrlr;
 }
 
+void ClientServiceManager::StartClientServiceManagerThread()
+{
+}
+
 ClientServiceManager::~ClientServiceManager() {}

@@ -20,3 +20,17 @@ ServerController::ServerController(std::string ip_addr, uint16_t port_no, std::s
     this->client_db_mgr = new ClientDbManager(this);
     this->client_svc_mgr = new ClientServiceManager(this);
 }
+
+void ServerController::Start()
+{
+    // Start Service Threads
+    this->conn_acc->StartConnectionAcceptorThread();
+    this->client_svc_mgr->StartClientServiceManagerThread();
+    this->client_db_mgr->StartClientDbManagerThread();
+
+    printf("Server started: [%s, %d]\nOk.\n", convert_ip_n_to_p(this->ip_addr, 0), this->port_no);
+}
+
+ServerController::~ServerController()
+{
+}
