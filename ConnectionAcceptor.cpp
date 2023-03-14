@@ -20,16 +20,6 @@ ConnectionAcceptor::ConnectionAcceptor(ServerController *ctrlr)
         exit(1);
     }
 
-    this->ctrlr = ctrlr;
-}
-
-ConnectionAcceptor::~ConnectionAcceptor()
-{
-    WSACleanup();
-}
-
-void ConnectionAcceptor::StartConnectionAcceptorThread()
-{
     struct sockaddr_in server_addr;
 
     server_addr.sin_family = AF_INET;
@@ -54,6 +44,37 @@ void ConnectionAcceptor::StartConnectionAcceptorThread()
         exit(1);
     }
 
-    // TODO: while available, accept client
+    this->ctrlr = ctrlr;
+}
 
+ConnectionAcceptor::~ConnectionAcceptor()
+{
+    StopConnectionAcceptorThread();
+    WSACleanup();
+}
+
+void ConnectionAcceptor::StartConnectionAcceptorThread()
+{
+
+    DWORD threadId;
+
+    this->thread_hdl = CreateThread(NULL, 0, ConnectionAcceptorThread, (LPVOID)this, 0, &threadId);
+}
+
+void ConnectionAcceptor::StopConnectionAcceptorThread()
+{
+    CloseHandle(this->thread_hdl);
+    this->thread_hdl = NULL;
+}
+
+DWORD WINAPI ConnectionAcceptor::ConnectionAcceptorThread(LPVOID lpParam)
+{
+    ConnectionAcceptor *acceptor = (ConnectionAcceptor *)lpParam;
+
+    // while available, accept client
+
+    // while (true)
+    // {
+    // }
+    return 0;
 }

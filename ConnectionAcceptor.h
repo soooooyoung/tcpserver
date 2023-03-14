@@ -18,12 +18,14 @@ class ConnectionAcceptor
 private:
     ServerController *ctrlr;
     SOCKET socket_hdl;
+    HANDLE thread_hdl;
 
 public:
     ConnectionAcceptor(ServerController *);
     ~ConnectionAcceptor();
-
     void StartConnectionAcceptorThread();
+    void StopConnectionAcceptorThread();
+    static DWORD WINAPI ConnectionAcceptorThread(LPVOID param);
 };
 
 #endif
