@@ -1,8 +1,16 @@
 #ifndef __SERVERCONTROLLER__
 #define __SERVERCONTROLLER__
 
+#include <iostream>
 #include <stdint.h>
 #include <string>
+#include <winsock2.h>
+#include <ws2tcpip.h>
+
+#include "ConnectionAcceptor.h"
+#include "ClientDbManager.h"
+#include "ClientServiceManager.h"
+#include "network_utils.h"
 
 class ConnectionAcceptor;
 class ClientServiceManager;
