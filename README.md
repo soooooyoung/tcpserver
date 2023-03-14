@@ -34,5 +34,33 @@ Services runs as separate threads in infinite loop. The server controller acts a
 ### Client Data Request Service
 
 - Responsible for communicating with connected clients
-- Maintinas one or more copy of all connected clients
+- Maintains one or more copy of all connected clients
 - A thread + data structure
+
+## Project Timeline 
+
+### Common
+
+✅ Project Architecture and Class Definitions  
+
+### Server Controller
+
+✅ Receive and Process New Connecting Clients from Connection Acceptor Service to other services  
+🔲 Receive and Process Disconnecting Clients from Connection Acceptor Service to other services  
+🔲 Receive and Process Data Requests from Clients to other services  
+🔲 Upon Shut Down, Terminate All Services and Gracefully Shut Down  
+
+### Connection Acceptor Service 
+
+✅ Accept Connection Request from Clients  
+
+### Client DB Manager
+
+✅ Store Connected Clients   
+✅ Add/Remove Clients  
+
+### Client Data Request Service
+ 
+🔲 Connect to Database (External)  
+🔲 Fetch Data Upon Client Request  
+🔲 Deliver Data to Clients  
