@@ -9,14 +9,16 @@ class ServerController;
 class ClientDbManager
 {
 private:
-    std::list<Client *> client_db;
+    std::list<SOCKET> client_db;
+    CRITICAL_SECTION cs;
 
 public:
     ServerController *ctrlr;
     ClientDbManager(ServerController *);
     ~ClientDbManager();
 
-    void StartClientDbManagerThread();
+    void AddClient(SOCKET client);
+    void RemoveClient(SOCKET client);
 };
 
 #endif

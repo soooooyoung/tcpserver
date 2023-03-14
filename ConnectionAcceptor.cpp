@@ -59,6 +59,8 @@ void ConnectionAcceptor::StartConnectionAcceptorThread()
     DWORD threadId;
 
     this->thread_hdl = CreateThread(NULL, 0, ConnectionAcceptorThread, (LPVOID)this, 0, &threadId);
+
+    printf("Connection Acceptor Thread Started");
 }
 
 void ConnectionAcceptor::StopConnectionAcceptorThread()
@@ -73,8 +75,20 @@ DWORD WINAPI ConnectionAcceptor::ConnectionAcceptorThread(LPVOID lpParam)
 
     // while available, accept client
 
-    // while (true)
-    // {
-    // }
+    while (true)
+    {
+        SOCKET clientSocket = accept(acceptor->socket_hdl, NULL, NULL);
+        if (clientSocket != INVALID_SOCKET)
+        {
+            // add client socket to client db manager through server controller
+            acceptor->ctrlr->ProcessNewClient(clientSocket);
+        }
+        else
+        {
+            printf("Connection Accept Failed");
+            closesocket(clientSocket);
+        }
+    }
+
     return 0;
 }
