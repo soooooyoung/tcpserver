@@ -3,22 +3,25 @@
 
 ConnectionAcceptor::ConnectionAcceptor(ServerController *ctrlr)
 {
+    this->ctrlr = ctrlr;
     // Initialize Window's Socket (Winsock)
     // NOTE: On Windows systems, the core components of the socket come in the form of a dll file. (ws2_32.dll)
     WSADATA wsaData;
     int result = WSAStartup(MAKEWORD(2, 2), &wsaData);
     if (result != 0)
     {
-        printf("WSAStartup failed");
-        exit(1);
+        printf("WSAStartup failed\n");
+        // exit(1);
     }
     this->socket_hdl = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
     if (this->socket_hdl == INVALID_SOCKET)
     {
-        printf("Failed to create socket.");
+        printf("Failed to create socket.\n");
         WSACleanup();
-        exit(1);
+        // exit(1);
     }
+
+    // server address setting
 
     struct sockaddr_in server_addr;
 
@@ -29,22 +32,20 @@ ConnectionAcceptor::ConnectionAcceptor(ServerController *ctrlr)
     // bind socket
     if (bind(this->socket_hdl, (sockaddr *)&server_addr, sizeof(server_addr)) == SOCKET_ERROR)
     {
-        printf("Failed to bind socket.");
+        printf("Failed to bind socket.\n");
         closesocket(socket_hdl);
         WSACleanup();
-        exit(1);
+        // exit(1);
     }
 
     // listen on socket
     if (listen(this->socket_hdl, SOMAXCONN) == SOCKET_ERROR)
     {
-        printf("Failed to listen on socket.");
+        printf("Failed to listen on socket.\n");
         closesocket(this->socket_hdl);
         WSACleanup();
-        exit(1);
+        // exit(1);
     }
-
-    this->ctrlr = ctrlr;
 }
 
 ConnectionAcceptor::~ConnectionAcceptor()

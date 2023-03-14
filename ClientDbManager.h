@@ -10,7 +10,7 @@ class ClientDbManager
 {
 private:
     std::list<SOCKET> client_db;
-    CRITICAL_SECTION cs;
+    SRWLOCK lock;
 
 public:
     ServerController *ctrlr;
