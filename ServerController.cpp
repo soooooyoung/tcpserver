@@ -44,5 +44,6 @@ void ServerController::ProcessAddClient(TcpClient *client)
 
 void ServerController::ProcessRemoveClient(TcpClient *client)
 {
+
     this->client_db_mgr->RemoveClient(client);
 }

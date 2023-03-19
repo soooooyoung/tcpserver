@@ -20,6 +20,7 @@ private:
     ServerController *ctrlr;
     SOCKET socket_hdl;
     HANDLE thread_hdl;
+    bool running_flag;
 
 public:
     ConnectionAcceptor(ServerController *);

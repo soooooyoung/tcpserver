@@ -10,6 +10,14 @@ ClientDbManager::ClientDbManager(ServerController *ctrlr)
 
 ClientDbManager::~ClientDbManager()
 {
+    // Client DB is responsible for the memory allocation of TcpClient
+    for (auto it = this->client_db.begin(); it != this->client_db.end(); ++it)
+    {
+        delete *it;
+    }
+
+    // Close mutex
+    CloseHandle(this->dbMutex);
 }
 
 void ClientDbManager::AddClient(TcpClient *client)
@@ -29,7 +37,8 @@ void ClientDbManager::RemoveClient(TcpClient *client)
     {
         if (*i == client)
         {
-            client->Abort();
+            (*i)->Abort();
+            delete *i;
             this->client_db.erase(i);
             break;
         }

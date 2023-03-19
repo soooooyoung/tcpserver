@@ -9,6 +9,7 @@ ConnectionAcceptor::ConnectionAcceptor(ServerController *ctrlr)
 ConnectionAcceptor::~ConnectionAcceptor()
 {
     StopConnectionAcceptorThread();
+    closesocket(this->socket_hdl);
     WSACleanup();
 }
 
@@ -43,7 +44,7 @@ void ConnectionAcceptor::Init()
     if (bind(this->socket_hdl, (sockaddr *)&server_addr, sizeof(server_addr)) == SOCKET_ERROR)
     {
         printf("Failed to bind socket.\n");
-        closesocket(socket_hdl);
+        closesocket(this->socket_hdl);
         WSACleanup();
         // exit(1);
     }
@@ -61,8 +62,8 @@ void ConnectionAcceptor::Init()
 void ConnectionAcceptor::StartConnectionAcceptorThread()
 {
 
+    this->running_flag = true;
     DWORD threadId;
-
     this->thread_hdl = CreateThread(NULL, 0, ConnectionAcceptorThread, (LPVOID)this, 0, &threadId);
 
     printf("Connection Acceptor Thread Started");
@@ -70,6 +71,7 @@ void ConnectionAcceptor::StartConnectionAcceptorThread()
 
 void ConnectionAcceptor::StopConnectionAcceptorThread()
 {
+    this->running_flag = false;
     WaitForSingleObject(this->thread_hdl, INFINITE);
     CloseHandle(this->thread_hdl);
     this->thread_hdl = NULL;
@@ -81,7 +83,7 @@ DWORD WINAPI ConnectionAcceptor::ConnectionAcceptorThread(LPVOID lpParam)
 
     // while available, accept client
 
-    while (true)
+    while (acceptor->running_flag)
     {
         struct sockaddr_in client_addr;
         socklen_t addr_len = sizeof(client_addr);
@@ -91,6 +93,7 @@ DWORD WINAPI ConnectionAcceptor::ConnectionAcceptorThread(LPVOID lpParam)
 
         if (clientSocket != INVALID_SOCKET)
         {
+            printf("Connection Attempt");
             // Create and Initialize TcpClient
             TcpClient *newClient = new TcpClient(htonl(client_addr.sin_addr.s_addr), htons(client_addr.sin_port));
 
