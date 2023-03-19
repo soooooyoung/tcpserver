@@ -13,6 +13,8 @@ TCP/IP server using socket programming
 
 ## TCP Server Architecture
 
+![](architecture.png)
+
 Services runs as separate threads in infinite loop. The server controller acts as the central entity responsible for managing the service threads and Client DB. It starts all service threads and intializes resources required for the server. When asked to shut-down by the application, the controller will purge client DB and send shut-down notification to all service threads and allow them to release their resources before shutting down. Service threads do not communicate directly but instead through server controller. This allows scalability as services are independent from each other.
 
 ### Server Controller
