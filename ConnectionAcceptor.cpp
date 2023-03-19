@@ -4,6 +4,16 @@
 ConnectionAcceptor::ConnectionAcceptor(ServerController *ctrlr)
 {
     this->ctrlr = ctrlr;
+}
+
+ConnectionAcceptor::~ConnectionAcceptor()
+{
+    StopConnectionAcceptorThread();
+    WSACleanup();
+}
+
+void ConnectionAcceptor::Init()
+{
     // Initialize Window's Socket (Winsock)
     // NOTE: On Windows systems, the core components of the socket come in the form of a dll file. (ws2_32.dll)
     WSADATA wsaData;
@@ -48,12 +58,6 @@ ConnectionAcceptor::ConnectionAcceptor(ServerController *ctrlr)
     }
 }
 
-ConnectionAcceptor::~ConnectionAcceptor()
-{
-    StopConnectionAcceptorThread();
-    WSACleanup();
-}
-
 void ConnectionAcceptor::StartConnectionAcceptorThread()
 {
 
@@ -66,6 +70,7 @@ void ConnectionAcceptor::StartConnectionAcceptorThread()
 
 void ConnectionAcceptor::StopConnectionAcceptorThread()
 {
+    WaitForSingleObject(this->thread_hdl, INFINITE);
     CloseHandle(this->thread_hdl);
     this->thread_hdl = NULL;
 }
@@ -78,11 +83,20 @@ DWORD WINAPI ConnectionAcceptor::ConnectionAcceptorThread(LPVOID lpParam)
 
     while (true)
     {
-        SOCKET clientSocket = accept(acceptor->socket_hdl, NULL, NULL);
+        struct sockaddr_in client_addr;
+        socklen_t addr_len = sizeof(client_addr);
+        int comm_sock_fd;
+
+        SOCKET clientSocket = accept(acceptor->socket_hdl, (struct sockaddr *)&client_addr, &addr_len);
+
         if (clientSocket != INVALID_SOCKET)
         {
-            // add client socket to client db manager through server controller
-            acceptor->ctrlr->ProcessNewClient(clientSocket);
+            // Create and Initialize TcpClient
+            TcpClient *newClient = new TcpClient(htonl(client_addr.sin_addr.s_addr), htons(client_addr.sin_port));
+
+            newClient->client_socket = clientSocket;
+            // Add client information for client db manager and client service manager to process through server controller
+            acceptor->ctrlr->ProcessAddClient(newClient);
         }
         else
         {

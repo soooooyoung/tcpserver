@@ -10,11 +10,13 @@
 #include "ConnectionAcceptor.h"
 #include "ClientDbManager.h"
 #include "ClientServiceManager.h"
+#include "TcpClient.h"
 #include "network_utils.h"
 
 class ConnectionAcceptor;
 class ClientServiceManager;
 class ClientDbManager;
+class TcpClient;
 
 class ServerController
 {
@@ -31,8 +33,10 @@ public:
     void Start();
     void Stop();
 
-    void ProcessNewClient(SOCKET client);
-    
+    void ProcessAddClient(TcpClient *client);
+
+    void ProcessRemoveClient(TcpClient *client);
+
     uint32_t ip_addr;
     uint16_t port_no;
     std::string name;

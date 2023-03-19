@@ -3,22 +3,24 @@
 
 #include <list>
 
-class Client;
 class ServerController;
+class TcpClient;
 
 class ClientDbManager
 {
 private:
-    std::list<SOCKET> client_db;
-    SRWLOCK lock;
+    std::list<TcpClient *> client_db;
+    HANDLE dbMutex;
 
 public:
     ServerController *ctrlr;
     ClientDbManager(ServerController *);
     ~ClientDbManager();
 
-    void AddClient(SOCKET client);
-    void RemoveClient(SOCKET client);
+    void AddClient(TcpClient *client);
+    void RemoveClient(TcpClient *client);
+
+
 };
 
 #endif

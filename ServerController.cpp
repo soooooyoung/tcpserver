@@ -17,6 +17,9 @@ ServerController::ServerController(std::string ip_addr, uint16_t port_no, std::s
     this->conn_acc = new ConnectionAcceptor(this);
     this->client_db_mgr = new ClientDbManager(this);
     this->client_svc_mgr = new ClientServiceManager(this);
+
+    // Winsock Initialization
+    this->conn_acc->Init();
 }
 
 ServerController::~ServerController()
@@ -27,13 +30,19 @@ void ServerController::Start()
 {
     // Start Service Threads
     this->conn_acc->StartConnectionAcceptorThread();
-    this->client_svc_mgr->StartClientServiceManagerThread();
 
     printf("Server started: [%s, %d]\nOk.\n", convert_ip_n_to_p(this->ip_addr, 0), this->port_no);
 }
 
-void ServerController::ProcessNewClient(SOCKET client)
+void ServerController::ProcessAddClient(TcpClient *client)
 {
+    // TODO: Multithreading for larger traffic
     this->client_db_mgr->AddClient(client);
-    // TODO: Start Listening to Client with Client Service Manager
+    // TODO: Start Listening to TcpClient with TcpClient Service Manager
+    this->client_svc_mgr->AddNewClientThread(client);
+}
+
+void ServerController::ProcessRemoveClient(TcpClient *client)
+{
+    this->client_db_mgr->RemoveClient(client);
 }

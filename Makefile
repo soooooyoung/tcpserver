@@ -7,7 +7,8 @@ OBJS=ClientDbManager.o 		 		\
 			ClientServiceManager.o 		 \
 			ConnectionAcceptor.o 	 \
 			ServerController.o 				  \
-			network_utils.o					
+			network_utils.o					\
+			TcpClient.o
 
 server.exe:server.o ${OBJS}
 	${CC} ${CFLAGS} ${OBJS} server.o -o server.exe ${LIBS} ${WINDOWLIBS}
@@ -26,6 +27,9 @@ ConnectionAcceptor.o:ConnectionAcceptor.cpp
 
 ServerController.o:ServerController.cpp
 	${CC} ${CFLAGS} -c ServerController.cpp -o ServerController.o
+
+TcpClient.o:TcpClient.cpp
+	${CC} ${CFLAGS} -c TcpClient.cpp -o TcpClient.o
 
 network_utils.o:network_utils.cpp
 	${CC} ${CFLAGS} -c network_utils.cpp -o network_utils.o 
