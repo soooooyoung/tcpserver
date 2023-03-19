@@ -48,7 +48,7 @@ Services runs as separate threads in infinite loop. The server controller acts a
 ### Server Controller
 
 ✅ Receive and Process New Connecting Clients from Connection Acceptor Service to other services  
-🔲 Receive and Process Disconnecting Clients from Connection Acceptor Service to other services  
+✅ Receive and Process Disconnecting Clients from Connection Acceptor Service to other services  
 🔲 Receive and Process Data Requests from Clients to other services  
 🔲 Upon Shut Down, Terminate All Services and Gracefully Shut Down  
 
