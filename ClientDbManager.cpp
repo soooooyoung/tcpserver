@@ -20,6 +20,15 @@ ClientDbManager::~ClientDbManager()
     CloseHandle(this->dbMutex);
 }
 
+bool ClientDbManager::IsMaxed()
+{
+    if (this->client_db.size() > this->max_clients)
+    {
+        return true;
+    }
+    return false;
+}
+
 void ClientDbManager::AddClient(TcpClient *client)
 {
     // Only add one at a time

@@ -17,6 +17,8 @@ ClientServiceManager::~ClientServiceManager()
 {
     // Close all thread handles in the vector
     StopAllClientThreads();
+    // Close mutex
+    CloseHandle(this->clientMutex);
     // The std::vector class internally manages an array to hold its elements, and the memory for that array is automatically allocated and deallocated by the std::vector object itself.
 }
 
@@ -26,23 +28,38 @@ void ClientServiceManager::AddNewClientThread(TcpClient *client)
     ServiceThreadParams *params = new ServiceThreadParams;
     params->client = client;
     params->ctrlr = this->ctrlr;
-    this->clientThreads.push_back(CreateThread(NULL, 0, ListenClientThread, params, 0, NULL));
+    this->clientThreads[client] = CreateThread(NULL, 0, ListenClientThread, params, 0, NULL);
+    ReleaseMutex(this->clientMutex);
+}
+
+void ClientServiceManager::StopClientThread(TcpClient *client)
+{
+    // only client thread stopped and removed. client itself is deleted during client db's process of removal.
+    WaitForSingleObject(this->clientMutex, INFINITE);
+    std::map<TcpClient *, HANDLE>::iterator found = this->clientThreads.find(client);
+
+    if (found != clientThreads.end())
+    {
+        HANDLE clientHandle = found->second;
+        CloseHandle(clientHandle);
+    }
+    clientThreads.erase(found);
     ReleaseMutex(this->clientMutex);
 }
 
 void ClientServiceManager::StopAllClientThreads()
 {
+    WaitForSingleObject(this->clientMutex, INFINITE);
+
     // Join all the client threads
     for (auto &thread : this->clientThreads)
     {
-        WaitForSingleObject(this->clientMutex, INFINITE);
-        CloseHandle(thread);
-        ReleaseMutex(this->clientMutex);
+        CloseHandle(thread.second);
     }
     // Clear the clientThreads vector
     this->clientThreads.clear();
-    // Close mutex
-    CloseHandle(this->clientMutex);
+
+    ReleaseMutex(this->clientMutex);
 }
 
 DWORD WINAPI ClientServiceManager::ListenClientThread(LPVOID lpParam)
@@ -54,8 +71,12 @@ DWORD WINAPI ClientServiceManager::ListenClientThread(LPVOID lpParam)
     char buffer[1024];
     int bytesReceived;
 
-    while (true)
+    while (client != nullptr)
     {
+        if (!client->client_socket)
+        {
+            break;
+        }
         // recv returns the number of bytes received, or `SOCKET_ERROR` if an error occurs. When the recv function is called, it fills the buffer with the received data, but does not null-terminate the data.
         bytesReceived = recv(client->client_socket, buffer, 1024, 0);
         if (bytesReceived == SOCKET_ERROR)

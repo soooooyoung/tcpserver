@@ -1,7 +1,7 @@
 #ifndef __CLIENTSERVICEMANAGER__
 #define __CLIENTSERVICEMANAGER__
 
-#include <vector>
+#include <map>
 
 class ServerController;
 class TcpClient;
@@ -10,7 +10,8 @@ class ClientServiceManager
 
 private:
     ServerController *ctrlr;
-    std::vector<HANDLE> clientThreads;
+    // std::map that maps a TcpClient* to a HANDLE.
+    std::map<TcpClient *, HANDLE> clientThreads;
     HANDLE clientMutex;
 
 public:
@@ -18,6 +19,7 @@ public:
     ~ClientServiceManager();
 
     void AddNewClientThread(TcpClient *client);
+    void StopClientThread(TcpClient *client);
     void StopAllClientThreads();
 
     static DWORD WINAPI ListenClientThread(LPVOID param);

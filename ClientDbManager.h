@@ -11,6 +11,7 @@ class ClientDbManager
 private:
     std::list<TcpClient *> client_db;
     HANDLE dbMutex;
+    int max_clients = 10;
 
 public:
     ServerController *ctrlr;
@@ -20,7 +21,7 @@ public:
     void AddClient(TcpClient *client);
     void RemoveClient(TcpClient *client);
 
-
+    bool IsMaxed();
 };
 
 #endif

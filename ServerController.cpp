@@ -36,14 +36,24 @@ void ServerController::Start()
 
 void ServerController::ProcessAddClient(TcpClient *client)
 {
-    // TODO: Multithreading for larger traffic
-    this->client_db_mgr->AddClient(client);
-    // TODO: Start Listening to TcpClient with TcpClient Service Manager
-    this->client_svc_mgr->AddNewClientThread(client);
+
+    if (!this->client_db_mgr->IsMaxed())
+    {
+        // TODO: Multithreading for larger traffic
+        this->client_db_mgr->AddClient(client);
+        // TODO: Start Listening to TcpClient with TcpClient Service Manager
+        this->client_svc_mgr->AddNewClientThread(client);
+    }
+    else
+    {
+        // do something if client is at maximum
+    }
 }
 
 void ServerController::ProcessRemoveClient(TcpClient *client)
 {
-
+    // remove list of clients from db
     this->client_db_mgr->RemoveClient(client);
+    // stop and remove client listen thread
+    this->client_svc_mgr->StopClientThread(client);
 }

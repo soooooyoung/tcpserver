@@ -34,7 +34,6 @@ public:
     void Stop();
 
     void ProcessAddClient(TcpClient *client);
-
     void ProcessRemoveClient(TcpClient *client);
 
     uint32_t ip_addr;
