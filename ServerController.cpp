@@ -39,14 +39,14 @@ void ServerController::ProcessAddClient(TcpClient *client)
 
     if (!this->client_db_mgr->IsMaxed())
     {
-        // TODO: Multithreading for larger traffic
         this->client_db_mgr->AddClient(client);
-        // TODO: Start Listening to TcpClient with TcpClient Service Manager
         this->client_svc_mgr->AddNewClientThread(client);
     }
     else
     {
-        // do something if client is at maximum
+        // disconnect if client is at maximum
+        client->Abort();
+        delete client;
     }
 }
 

@@ -105,6 +105,7 @@ DWORD WINAPI ConnectionAcceptor::ConnectionAcceptorThread(LPVOID lpParam)
         {
             printf("Connection Accept Failed");
             closesocket(clientSocket);
+            break;
         }
     }
 

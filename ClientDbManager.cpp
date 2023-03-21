@@ -22,7 +22,7 @@ ClientDbManager::~ClientDbManager()
 
 bool ClientDbManager::IsMaxed()
 {
-    if (this->client_db.size() > this->max_clients)
+    if (this->client_db.size() >= this->max_clients)
     {
         return true;
     }
