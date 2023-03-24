@@ -64,6 +64,7 @@ Services runs as separate threads in infinite loop. The server controller acts a
 ### Client Data Request Service 
  
 ✅ Receive Data from Clients
+✅ Detect Client Disconnection
 
 ### Postphoned until Client Completion
 
